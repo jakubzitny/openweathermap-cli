@@ -4,5 +4,14 @@
   "description": "Display weather info for a city from OpenWeather API",
   "main": "index.js",
   "author": "Jakub Žitný <jakubzitny@avocode.com> (https://github.com/jakubzitny)",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2"
+  }
 }
