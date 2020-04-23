@@ -28,5 +28,8 @@
   },
   "prettier": {
     "singleQuote": true
+  },
+  "dependencies": {
+    "got": "^11.0.2"
   }
 }
