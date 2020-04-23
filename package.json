@@ -1,0 +1,8 @@
+{
+  "name": "openweather-cli",
+  "version": "0.0.1",
+  "description": "Display weather info for a city from OpenWeather API",
+  "main": "index.js",
+  "author": "Jakub Žitný <jakubzitny@avocode.com> (https://github.com/jakubzitny)",
+  "license": "MIT"
+}
