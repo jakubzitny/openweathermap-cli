@@ -2,16 +2,26 @@
   "name": "openweather-cli",
   "version": "0.0.1",
   "description": "Display weather info for a city from OpenWeather API",
-  "main": "index.js",
+  "main": "bin/index.js",
   "author": "Jakub Žitný <jakubzitny@avocode.com> (https://github.com/jakubzitny)",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint ."
+    "start": "babel-node src/index.js",
+    "start:bin": "node bin/index.js",
+    "build": "babel src/ -d bin/",
+    "prepublish": "yarn run build",
+    "lint": "eslint src/",
+    "flow": "flow"
   },
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-flow": "^7.9.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
-    "eslint-plugin-import": "^2.20.2"
+    "eslint-plugin-import": "^2.20.2",
+    "flow-bin": "^0.123.0"
   }
 }
