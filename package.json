@@ -11,7 +11,8 @@
     "build": "babel src/ -d bin/",
     "prepublish": "yarn run build",
     "lint": "eslint src/",
-    "flow": "flow"
+    "flow": "flow",
+    "prettier": "prettier -c src/"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -22,6 +23,10 @@
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.2",
-    "flow-bin": "^0.123.0"
+    "flow-bin": "^0.123.0",
+    "prettier": "2.0.5"
+  },
+  "prettier": {
+    "singleQuote": true
   }
 }
