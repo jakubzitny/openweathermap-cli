@@ -45,7 +45,7 @@ const verifyZipCode = () => {
 
 const startConversation = async (
   parsedArgs: Object,
-  detectedCity: ?string = null
+  detectedCity?: ?string = null
 ) => {
   const rl = createReadlineInterface();
   const zipcode = await askTillCorrect(

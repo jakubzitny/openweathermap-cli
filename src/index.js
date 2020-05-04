@@ -69,21 +69,22 @@ const validateApiData = (data?: ApiData) => {
   return data;
 };
 
-const initCliParser = async (city: ?string = null) => {
+const locationDetector = () => {
+  return null; // 'Paris'
+};
+
+const initCliParser = async () => {
   const cliParser = require('./cli-parser');
   const { interactive, parsedArgs } = cliParser.parseCliArgs();
   if (!interactive) {
     return parsedArgs;
   }
 
+  const city = locationDetector();
   const interviewer = require('./interviewer');
   const args = await interviewer.startConversation(parsedArgs, city);
 
   return args;
-};
-
-const locationDetector = () => {
-  return 'Paris';
 };
 
 const convertScale = (
@@ -99,12 +100,11 @@ const convertScale = (
 };
 
 const main = async () => {
-  const city = locationDetector(); // TODO
-  const args = await initCliParser(city);
+  const args = await initCliParser();
   // TODO: save config
 
   try {
-    const data = await fetcher(args.city);
+    const data = await fetcher(args.city || args.zip);
     const validatedData = validateApiData(data);
     const temp = convertScale(validatedData.main.temp, args.scale);
     console.log(temp);
