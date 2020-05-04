@@ -18,6 +18,19 @@ const fetcher = async () => {
   }
 };
 
+const initCliParser = async (city: ?string = null) => {
+  const cliParser = require('./cli-parser');
+  const { interactive, parsedArgs } = cliParser.parseCliArgs();
+  if (!interactive) {
+    return parsedArgs;
+  }
+
+  const interviewer = require('./interviewer');
+  const args = await interviewer.startConversation(parsedArgs, city);
+
+  return args;
+};
+
 const locationDetector = () => {
   return 'Paris';
 };
@@ -36,11 +49,12 @@ const convertScale = (
 
 const main = async () => {
   const city = locationDetector(); // TODO
+  const args = initCliParser(city);
   // TODO: save config
 
-  const data = await fetcher(city); // TODO
+  const data = await fetcher(args.city); // TODO
   // TODO validate data
-  const temp = convertScale(data.main.temp);
+  const temp = convertScale(data.main.temp, args.scale);
   console.log(temp);
 };
 

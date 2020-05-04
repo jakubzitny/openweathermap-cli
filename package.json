@@ -30,6 +30,7 @@
     "singleQuote": true
   },
   "dependencies": {
-    "got": "^11.0.2"
+    "got": "^11.0.2",
+    "yargs": "^15.3.1"
   }
 }
