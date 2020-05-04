@@ -27,7 +27,8 @@
     "prettier": "2.0.5"
   },
   "prettier": {
-    "singleQuote": true
+    "singleQuote": true,
+    "trailingComma": "none"
   },
   "dependencies": {
     "got": "^11.0.2",
