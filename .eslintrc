@@ -26,7 +26,8 @@
     "Cypress": true,
     "cy": true,
     "after": true,
-    "before": true
+    "before": true,
+    "$Shape": true
   },
   "rules": {
     "object-shorthand": ["error", "always", { "avoidExplicitReturnArrows": true }],
@@ -81,5 +82,8 @@
         "object-shorthand": "off"
       }
     }
+  ],
+  "plugins": [
+    "flowtype"
   ]
 }
