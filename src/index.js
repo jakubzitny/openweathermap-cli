@@ -8,7 +8,10 @@ import got from 'got';
 import yargs from 'yargs';
 
 import Interviewer from './interviewer';
-import ApiRequestor, { validateApiData } from './api-requestor';
+import OpenWeatherMapApiRequestor, {
+  validateApiData
+} from './api/openweathermap-api-requestor';
+import ApiRequestor from './api/api-requestor';
 import CliParser from './cli-parser';
 import { detectLocation } from './location-detector';
 import { convertScale } from './utils/scale-converter';
@@ -20,13 +23,25 @@ const initServices = () => {
   };
 
   const interviewer = new Interviewer(interviewerServices);
-  return {
-    interviewer,
+  const apiRequestor = new ApiRequestor({ got });
+  const openWeatherMapApiRequestor = new OpenWeatherMapApiRequestor({
+    apiRequestor,
+    process
+  });
+
+  const cliParserServices = {
     fs,
-    readline,
+    interviewer,
     os,
-    got,
     yargs
+  };
+
+  const cliParser = new CliParser(cliParserServices);
+
+  return {
+    cliParser,
+    interviewer,
+    openWeatherMapApiRequestor
   };
 };
 
@@ -34,24 +49,24 @@ const main = async () => {
   const services = initServices();
 
   const detectedLocation = detectLocation();
-  const cliParser = new CliParser(services);
-  const args = await cliParser.initCliParser(detectedLocation);
+  const args = await services.cliParser.initCliParser(detectedLocation);
 
   try {
     // NOTE: Try saving config, continue if it fails.
-    cliParser.saveConfig(args);
+    services.cliParser.saveConfig(args);
   } catch (configError) {
     console.warn('There is a problem with saving your config', configError);
   }
 
   try {
-    const apiRequestor = new ApiRequestor(services);
-    const data = await apiRequestor.fetch(args.city || args.zip);
+    const data = await services.openWeatherMapApiRequestor.fetch(
+      args.city || args.c || args.zip || args.z
+    );
     const validatedData = validateApiData(data);
     const temp = convertScale(validatedData.main.temp, args.scale);
     console.log(temp);
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error(error);
   }
 };
 
