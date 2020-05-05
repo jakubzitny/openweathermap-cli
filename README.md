@@ -8,7 +8,16 @@ Display weather info for a city from OpenWeatherMap API, interactively, from com
 
 ## Usage
 
-Make sure you have `OPENWEATHERMAP_API_KEY` in env when running this app. Get it at [openweathermap.org](https://home.openweathermap.org/api_keys). For convenience, alias `yarn start` or `node bin/index.js` to `openweathermap-cli`, exact steps are at the bottom of this README.
+Make sure you have `OPENWEATHERMAP_API_KEY` in env when running this app. Get it at [openweathermap.org](https://home.openweathermap.org/api_keys).
+
+Install:
+
+```
+npm install -g @jakubzitny/openweathermap-cli
+export OPENWEATHERMAP_API_KEY="your key"
+
+openweathermap-cli -h
+```
 
 Examples:
 
