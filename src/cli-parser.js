@@ -12,7 +12,7 @@ import type Interviewer from './interviewer';
 import type LocationDetector from './location-detector';
 import type { Scale } from './utils/scale-converter';
 
-type Args = $Shape<{
+export type Args = $Shape<{
   z: string,
   zip: string,
   c: string,
@@ -24,7 +24,8 @@ type Args = $Shape<{
   g: boolean,
   disableGeolocation: boolean,
   i: string,
-  import: string
+  import: string,
+  locations: Array<string>
 }>;
 
 export default class CliParser {
@@ -59,6 +60,24 @@ export default class CliParser {
   async parseCliArgs() {
     const argv = this.yargs.options(cliConfig).argv;
 
+    if (argv.import) {
+      try {
+        const multiCityConfig = await this.readFile(argv.import);
+        const locations = multiCityConfig.split('\n');
+        if (!locations.length || locations.length > 10) {
+          throw new Error('Too many locations');
+        }
+
+        return {
+          parsedArgs: argv,
+          interactive: false,
+          locations
+        };
+      } catch (e) {
+        throw new Error('We had problems loading the file you imported.');
+      }
+    }
+
     if (argv.latestQuery) {
       const latestQueryConfigPath = this.getLatestQueryConfigPath();
       const fileConfig = await this.readLatestQueryConfig(
@@ -67,20 +86,22 @@ export default class CliParser {
 
       return {
         parsedArgs: fileConfig,
-        interactive: false
+        interactive: false,
+        locations: []
       };
     }
 
     return {
       parsedArgs: argv,
-      interactive: this.detectInteractivity(argv)
+      interactive: this.detectInteractivity(argv),
+      locations: []
     };
   }
 
   async initCliParser() {
-    const { interactive, parsedArgs } = await this.parseCliArgs();
+    const { interactive, parsedArgs, locations } = await this.parseCliArgs();
     if (!interactive) {
-      return parsedArgs;
+      return { ...parsedArgs, locations };
     }
 
     const detectedCity = !parsedArgs.disableGeolocation
@@ -154,21 +175,21 @@ export default class CliParser {
     });
   }
 
-  readConfigFile(configPath: string): Promise<Args> {
-    return new Promise((resolve, reject) => {
-      try {
-        this.fs.readFile(configPath, (err, data) => {
-          if (err) {
-            reject(err);
-            return;
-          }
+  async readConfigFile(configPath: string): Promise<Args> {
+    const data = await this.readFile(configPath);
+    return JSON.parse(data);
+  }
 
-          const deserializedData = JSON.parse(data.toString());
-          resolve(deserializedData);
-        });
-      } catch (e) {
-        reject(e);
-      }
+  readFile(filePath: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.fs.readFile(filePath, (err, data) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        resolve(data.toString());
+      });
     });
   }
 }

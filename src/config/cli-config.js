@@ -29,6 +29,11 @@ export default {
     default: false,
     type: 'boolean'
   },
+  i: {
+    alias: 'import',
+    describe: 'Import a file with multiple locations',
+    type: 'string'
+  },
   v: {
     alias: 'version',
     describe: 'Show version number',

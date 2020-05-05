@@ -4,38 +4,50 @@ import { initServices } from './service-factory';
 import { validateApiData } from './api/openweathermap-api-requestor';
 import { convertScale, formatScale } from './utils/scale-converter';
 
+import type { Args } from './cli-parser';
+
+const runForLocation = async (location: string, args: Args, services: *) => {
+  const data = await services.openWeatherMapApiRequestor.fetch(location);
+  const validatedData = validateApiData(data);
+  const temp = convertScale(validatedData.main.temp, args.scale);
+
+  const description =
+    validatedData.weather &&
+    validatedData.weather[0] &&
+    validatedData.weather[0].description;
+  const formattedDescription = description ? `— ${description} ` : '';
+
+  // NOTE: Display results:
+  console.log();
+  console.log(`Weather in ${location} ${formattedDescription}`);
+  console.log(`Temperature: ${temp}${formatScale(args.scale)}`);
+  if (validatedData.main.humidity) {
+    console.log(`Humidity: ${validatedData.main.humidity}`);
+  }
+};
+
 const main = async () => {
   const services = initServices();
 
-  const args = await services.cliParser.initCliParser();
-
   try {
-    // NOTE: Try saving the current config, continue if it fails.
+    const args = await services.cliParser.initCliParser();
     services.cliParser.saveConfig(args);
-  } catch (configError) {
-    console.warn('There is a problem with saving your config', configError);
-  }
 
-  try {
-    const data = await services.openWeatherMapApiRequestor.fetch(
-      args.city || args.zip
-    );
-    const validatedData = validateApiData(data);
-    const temp = convertScale(validatedData.main.temp, args.scale);
+    // NOTE: Multi-location config
+    if (args.import && args.locations.length) {
+      args.locations.forEach(async (location) => {
+        if (!location) {
+          return;
+        }
 
-    const description =
-      validatedData.weather &&
-      validatedData.weather[0] &&
-      validatedData.weather[0].description;
-    const formattedDescription = description ? `— ${description} ` : '';
+        await runForLocation(location, args, services);
+      });
 
-    // NOTE: Display results:
-    console.log();
-    console.log(`Weather in ${args.city || args.zip} ${formattedDescription}`);
-    console.log(`Temperature: ${temp}${formatScale(args.scale)}`);
-    if (validatedData.main.humidity) {
-      console.log(`Humidity: ${validatedData.main.humidity}`);
+      return;
     }
+
+    // NOTE: Regular, one-location
+    runForLocation(args.city || args.zip, args, services);
   } catch (error) {
     console.error(error.message);
     services.process.exit(1);

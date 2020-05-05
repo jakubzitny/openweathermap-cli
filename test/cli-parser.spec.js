@@ -21,7 +21,8 @@ describe('CliParser', () => {
     scale: 'celsius',
     g: false,
     city: 'Paris',
-    c: 'Paris'
+    c: 'Paris',
+    locations: []
   };
 
   const createYargsMock = (argv = {}) => {
