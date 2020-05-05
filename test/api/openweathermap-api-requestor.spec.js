@@ -35,8 +35,8 @@ describe('OpenweatherMapApiRequestor', () => {
       const apiRequestor = createOpenweatherMapApiRequestor();
 
       const city = 'Paris';
-
       await apiRequestor.fetch(city);
+
       expect(services.apiRequestor.fetch).to.have.been.calledOnce;
       const fetchArg = services.apiRequestor.fetch.getCall(0).args[0];
       expect(fetchArg).to.contain('Paris');
@@ -46,8 +46,8 @@ describe('OpenweatherMapApiRequestor', () => {
       const apiRequestor = createOpenweatherMapApiRequestor();
 
       const city = 'Paris';
-
       await apiRequestor.fetch(city);
+
       expect(services.apiRequestor.fetch).to.have.been.calledOnce;
       const fetchArg = services.apiRequestor.fetch.getCall(0).args[0];
       expect(fetchArg).to.contain('&units=metric');
@@ -57,10 +57,41 @@ describe('OpenweatherMapApiRequestor', () => {
       const apiRequestor = createOpenweatherMapApiRequestor();
 
       const city = 'Paris';
-
       const data = await apiRequestor.fetch(city);
+
       const temp = data && data.main && data.main.temp;
       expect(temp).to.equal(25.2);
+    });
+
+    it('should throw when openweathermap api key is not available in env', async () => {
+      services.process.env.OPENWEATHERMAP_API_KEY = '';
+      const apiRequestor = createOpenweatherMapApiRequestor();
+
+      try {
+        const city = 'Paris';
+        await apiRequestor.fetch(city);
+      } catch (error) {
+        expect(error.message).to.equal(
+          'We could not find OpenWeatherMap API key in your env'
+        );
+      }
+    });
+
+    it('should throw when api fetch fails', async () => {
+      const error = new Error('error in test');
+      services.apiRequestor.fetch = () => {
+        throw error;
+      };
+      const apiRequestor = createOpenweatherMapApiRequestor();
+
+      try {
+        const city = 'Paris';
+        await apiRequestor.fetch(city);
+      } catch (catchedError) {
+        expect(catchedError.message).to.equal(
+          'There is a problem with calling the OpenWeatherMap API'
+        );
+      }
     });
   });
 
@@ -81,8 +112,13 @@ describe('OpenweatherMapApiRequestor', () => {
       );
     });
 
-    it('should not throw error for data with temp in main secion', () => {
-      expect(() => validateApiData({ main: { temp: 20 } })).to.not.throw;
+    it('should not throw error for data with temp in main secion', (callback) => {
+      try {
+        validateApiData({ main: { temp: 20 } });
+        callback();
+      } catch (e) {
+        callback.fail(new Error('failed in test'));
+      }
     });
   });
 });

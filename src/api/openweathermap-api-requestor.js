@@ -28,7 +28,7 @@ export default class OpenWeatherMapApiRequestor {
   fetch(city: string) {
     const apiKey = this.process.env.OPENWEATHERMAP_API_KEY;
     if (!apiKey) {
-      throw new Error('We could not find OpenWeatherMap API key in your env.');
+      throw new Error('We could not find OpenWeatherMap API key in your env');
     }
 
     try {
