@@ -48,5 +48,10 @@
   "dependencies": {
     "got": "^11.0.2",
     "yargs": "^15.3.1"
-  }
+  },
+  "files": [
+    "bin/",
+    "package.json",
+    "README.md"
+  ]
 }
