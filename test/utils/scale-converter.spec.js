@@ -2,7 +2,7 @@
 
 import { expect } from 'chai';
 
-import { convertScale } from '../../src/utils/scale-converter';
+import { convertScale, formatScale } from '../../src/utils/scale-converter';
 
 describe('convertScale', () => {
   it('should keep provided temp value in celsius by default', () => {
@@ -15,5 +15,13 @@ describe('convertScale', () => {
 
   it('should keep convert celsius to fahrenheit if fahrenheit is specified', () => {
     expect(convertScale(20, 'fahrenheit')).to.equal(68);
+  });
+
+  it('should return °C for celsius', () => {
+    expect(formatScale('celsius')).to.equal('°C');
+  });
+
+  it('should return °F for fahrenheit', () => {
+    expect(formatScale('fahrenheit')).to.equal('°F');
   });
 });

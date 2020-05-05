@@ -2,7 +2,7 @@
 
 import { initServices } from './service-factory';
 import { validateApiData } from './api/openweathermap-api-requestor';
-import { convertScale } from './utils/scale-converter';
+import { convertScale, formatScale } from './utils/scale-converter';
 
 const main = async () => {
   const services = initServices();
@@ -22,7 +22,7 @@ const main = async () => {
     );
     const validatedData = validateApiData(data);
     const temp = convertScale(validatedData.main.temp, args.scale);
-    console.log(temp);
+    console.log(temp, formatScale(args.scale));
   } catch (error) {
     console.error(error);
   }
