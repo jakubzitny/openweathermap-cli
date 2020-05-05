@@ -22,7 +22,7 @@ type Args = $Shape<{
   s: Scale,
   scale: Scale,
   g: boolean,
-  geolocation: boolean
+  disableGeolocation: boolean
 }>;
 
 // const verifyCliArgs = () => {
@@ -73,7 +73,9 @@ export default class CliParser {
       return parsedArgs;
     }
 
-    const detectedCity = await this.locationDetector.detectLocation();
+    const detectedCity = !parsedArgs.disableGeolocation ?
+      await this.locationDetector.detectLocation() :
+      null;
     const args = await this.interviewer.startConversation(
       parsedArgs,
       detectedCity

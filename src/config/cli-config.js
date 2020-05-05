@@ -24,9 +24,9 @@ export default {
     options: ['celsius', 'fahrenheit', 'c', 'f']
   },
   g: {
-    alias: 'geolocation',
+    alias: 'disable-geolocation',
     describe: 'Disable geolocation (enabled by default)',
-    default: true,
+    default: false,
     type: 'boolean'
   },
   v: {
