@@ -27,9 +27,6 @@ type Args = $Shape<{
   import: string
 }>;
 
-// const verifyCliArgs = () => {
-//   return true;
-// };
 
 export default class CliParser {
   fs: *;

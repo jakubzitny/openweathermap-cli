@@ -10,7 +10,7 @@ const main = async () => {
   const args = await services.cliParser.initCliParser();
 
   try {
-    // NOTE: Try saving config, continue if it fails.
+    // NOTE: Try saving the current config, continue if it fails.
     services.cliParser.saveConfig(args);
   } catch (configError) {
     console.warn('There is a problem with saving your config', configError);
