@@ -1,8 +1,11 @@
 {
   "name": "@jakubzitny/openweathermap-cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Display weather info for a city from OpenWeatherMap API",
-  "main": "bin/index.js",
+  "main": "lib/index.js",
+  "bin": {
+    "openweathermap-cli": "bin/index.js"
+  },
   "author": "Jakub Žitný <jakubzitny@avocode.com> (https://github.com/jakubzitny)",
   "repository": {
     "type": "git",
@@ -11,8 +14,8 @@
   "license": "MIT",
   "scripts": {
     "start": "babel-node src/index.js",
-    "start:bin": "node bin/index.js",
-    "build": "babel src/ -d bin/",
+    "start:built": "node lib/index.js",
+    "build": "babel src/ -d lib/",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "lint": "eslint src/",
@@ -49,6 +52,7 @@
   },
   "files": [
     "bin/",
+    "lib/",
     "package.json",
     "README.md"
   ]
