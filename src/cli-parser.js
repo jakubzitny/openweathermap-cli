@@ -22,7 +22,9 @@ type Args = $Shape<{
   s: Scale,
   scale: Scale,
   g: boolean,
-  disableGeolocation: boolean
+  disableGeolocation: boolean,
+  i: string,
+  import: string
 }>;
 
 // const verifyCliArgs = () => {
@@ -58,8 +60,18 @@ export default class CliParser {
     return !(parsedArgs.l || parsedArgs.c || parsedArgs.z);
   }
 
-  parseCliArgs() {
+  async parseCliArgs() {
     const argv = this.yargs.options(cliConfig).argv;
+
+    if (argv.latestQuery) {
+      const latestQueryConfigPath = this.getLatestQueryConfigPath();
+      const fileConfig = await this.readLatestQueryConfig(latestQueryConfigPath);
+
+      return {
+        parsedArgs: fileConfig,
+        interactive: false
+      };
+    }
 
     return {
       parsedArgs: argv,
@@ -68,7 +80,7 @@ export default class CliParser {
   }
 
   async initCliParser() {
-    const { interactive, parsedArgs } = this.parseCliArgs();
+    const { interactive, parsedArgs } = await this.parseCliArgs();
     if (!interactive) {
       return parsedArgs;
     }
@@ -82,6 +94,36 @@ export default class CliParser {
     );
 
     return args;
+  }
+
+  getLatestQueryConfigDir() {
+    const HOME_DIR_SUBDIR = '.openweather';
+    return path.join(this.os.homedir(), HOME_DIR_SUBDIR);
+  }
+
+  getLatestQueryConfigPath() {
+    return path.join(this.getLatestQueryConfigDir(), 'latest-query.json');
+  }
+
+  async saveConfig(args: Args) {
+    const dirPath = this.getLatestQueryConfigDir();
+    const filePath = this.getLatestQueryConfigPath();
+
+    try {
+      await this.ensureDir(dirPath);
+      await this.writeFile(filePath, args);
+    } catch (e) {
+      console.error('We had problems with saving your config', e);
+    }
+  }
+
+  readLatestQueryConfig(configPath: string) {
+    try {
+      return this.readConfigFile(configPath);
+    } catch (e) {
+      console.debug(e);
+      throw new Error('We had problems with reading your config');
+    }
   }
 
   ensureDir(dirPath: string): Promise<void> {
@@ -114,16 +156,21 @@ export default class CliParser {
     });
   }
 
-  async saveConfig(args: Args) {
-    const HOME_DIR_SUBDIR = '.openweather';
-    const dirPath = path.join(this.os.homedir(), HOME_DIR_SUBDIR);
-    const filePath = path.join(dirPath, 'config.json');
+  readConfigFile(configPath: string): Promise<Args> {
+    return new Promise((resolve, reject) => {
+      try {
+        this.fs.readFile(configPath, (err, data) => {
+          if (err) {
+            reject(err);
+            return;
+          }
 
-    try {
-      await this.ensureDir(dirPath);
-      await this.writeFile(filePath, args);
-    } catch (e) {
-      console.error('We had problems with saving your config', e);
-    }
+          const deserializedData = JSON.parse(data.toString());
+          resolve(deserializedData);
+        });
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
 }
