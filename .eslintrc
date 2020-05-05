@@ -6,7 +6,8 @@
     "node": true,
     "commonjs": true,
     "jasmine": true,
-    "es6": true
+    "es6": true,
+    "jest": true
   },
   "globals": {
     "isNaN": true,
@@ -27,7 +28,10 @@
     "cy": true,
     "after": true,
     "before": true,
-    "$Shape": true
+    "$Shape": true,
+    "Process": true,
+    "Readline": true,
+    "readline$Interface": true
   },
   "rules": {
     "object-shorthand": ["error", "always", { "avoidExplicitReturnArrows": true }],
@@ -81,9 +85,16 @@
       "rules": {
         "object-shorthand": "off"
       }
+    },
+    {
+      "files": ["*.spec.js"],
+      "rules": {
+          "no-unused-expressions": "off"
+      }
     }
   ],
   "plugins": [
-    "flowtype"
+    "flowtype",
+    "jest"
   ]
 }

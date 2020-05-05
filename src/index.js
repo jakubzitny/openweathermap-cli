@@ -1,110 +1,52 @@
 // @flow
 
-const got = require('got');
+import fs from 'fs';
+import os from 'os';
+import readline from 'readline';
 
-const fetcher = async (city: string) => {
-  // TODO: warn about missing key
-  const OPENWEATHERMAP_API_KEY = process.env.OPENWEATHERMAP_API_KEY || '';
-  try {
-    const urlBase = 'https://api.openweathermap.org/';
-    const query = city;
-    const url = `${urlBase}data/2.5/weather?q=${query}&appid=${OPENWEATHERMAP_API_KEY}&units=metric`;
-    const response = await got(url);
-    // console.log(response.body);
+import got from 'got';
+import yargs from 'yargs';
 
-    return JSON.parse(response.body);
-  } catch (error) {
-    console.log(error.response.body);
-  }
-};
+import Interviewer from './interviewer';
+import ApiRequestor, { validateApiData } from './api-requestor';
+import CliParser from './cli-parser';
+import { detectLocation } from './location-detector';
+import { convertScale } from './utils/scale-converter';
 
-type ApiDataWeather = {
-  id: number,
-  main: string,
-  description: string,
-  icon: string
-};
+const initServices = () => {
+  const interviewerServices = {
+    readline,
+    process // NOTE: Node global
+  };
 
-export type ApiData = {
-  coord: {
-    lon: number,
-    lat: number
-  },
-  weather: Array<ApiDataWeather>,
-  base: string,
-  main: {
-    temp: number,
-    temp_min: number,
-    temp_max: number,
-    pressure: number,
-    humidity: number
-  },
-  visibility: number,
-  wind: {
-    speed: number,
-    deg: number
-  },
-  clouds: {
-    all: number
-  },
-  dt: number,
-  sys: {
-    type: number,
-    id: number,
-    country: string,
-    sunrise: number,
-    sunset: number
-  },
-  timezone: number,
-  id: number,
-  name: string,
-  cod: number
-};
-
-const validateApiData = (data?: ApiData) => {
-  if (!data || !data.main || !data.main.temp) {
-    throw new Error('Invalid API response.');
-  }
-
-  return data;
-};
-
-const locationDetector = () => {
-  return null; // 'Paris'
-};
-
-const initCliParser = async () => {
-  const cliParser = require('./cli-parser');
-  const { interactive, parsedArgs } = cliParser.parseCliArgs();
-  if (!interactive) {
-    return parsedArgs;
-  }
-
-  const city = locationDetector();
-  const interviewer = require('./interviewer');
-  const args = await interviewer.startConversation(parsedArgs, city);
-
-  return args;
-};
-
-const convertScale = (
-  temp: number,
-  scale: 'celsius' | 'fahrenheit' = 'celsius'
-) => {
-  if (scale === 'celsius') {
-    return temp;
-  }
-
-  const fahrenheitTemp = (temp * 9) / 5 + 32;
-  return (fahrenheitTemp * 100) / 100;
+  const interviewer = new Interviewer(interviewerServices);
+  return {
+    interviewer,
+    fs,
+    readline,
+    os,
+    got,
+    yargs
+  };
 };
 
 const main = async () => {
-  const args = await initCliParser();
-  // TODO: save config
+  const services = initServices();
+
+  const detectedLocation = detectLocation();
+  const cliParser = new CliParser(services);
+  const args = await cliParser.initCliParser(detectedLocation);
 
   try {
-    const data = await fetcher(args.city || args.zip);
+    // NOTE: Try saving config, continue if it fails.
+    cliParser.saveConfig(args);
+  } catch (configError) {
+    console.warn('There is a problem with saving your config', configError);
+  }
+
+  try {
+    const apiRequestor = new ApiRequestor(services);
+    const data = await apiRequestor.fetch(args.city || args.zip);
     const validatedData = validateApiData(data);
     const temp = convertScale(validatedData.main.temp, args.scale);
     console.log(temp);

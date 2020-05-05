@@ -1,6 +1,6 @@
 // @flow
 
-module.exports = {
+export default {
   c: {
     alias: 'city',
     describe: 'Specify the city',

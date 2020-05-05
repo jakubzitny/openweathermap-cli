@@ -1,67 +1,70 @@
 // @flow
 
-const readline = require('readline');
+import typeof Readline from 'readline';
 
-type ReadlineInterface = readline.Interface;
+export default class Interviewer {
+  process: *;
 
-const createReadlineInterface = () => {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
+  readline: *;
 
-  return rl;
-};
-
-const askAndGetAnswer = (rl: ReadlineInterface, question: string) => {
-  return new Promise((resolve) => {
-    rl.question(question, (answer) => {
-      rl.close();
-
-      resolve(answer);
-    });
-  });
-};
-
-const askTillCorrect = async (
-  rl: ReadlineInterface,
-  question: string,
-  validator: (answer: string) => boolean,
-  detectedCity: ?string
-) => {
-  const defaultAnswer = detectedCity ? `[${detectedCity}] ` : '';
-  const answer = await askAndGetAnswer(rl, `${question}${defaultAnswer}`);
-  if (validator(answer) || detectedCity) {
-    return answer || detectedCity;
+  constructor(services: { process: Process, readline: Readline }) {
+    this.process = services.process;
+    this.readline = services.readline;
   }
 
-  console.log('Incorrect zip code or city.');
-  return askTillCorrect(rl, question, validator, detectedCity);
-};
+  createReadlineInterface() {
+    const rl = this.readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
 
-const verifyZipCode = () => {
-  return true;
-};
+    return rl;
+  }
 
-const startConversation = async (
-  parsedArgs: Object,
-  detectedCity?: ?string = null
-) => {
-  const rl = createReadlineInterface();
-  const zipcode = await askTillCorrect(
-    rl,
-    "What's the zipcode? ",
-    verifyZipCode,
-    detectedCity
-  );
+  askAndGetAnswer(rl: readline$Interface, question: string): Promise<string> {
+    return new Promise((resolve) => {
+      rl.question(question, (answer) => {
+        rl.close();
 
-  return {
-    ...parsedArgs,
-    z: zipcode,
-    zip: zipcode
-  };
-};
+        resolve(answer);
+      });
+    });
+  }
 
-module.exports = {
-  startConversation
-};
+  async askTillCorrect(
+    question: string,
+    validator: (input: string) => boolean,
+    detectedCity: ?string
+  ) {
+    const defaultAnswer = detectedCity ? `[${detectedCity}] ` : '';
+    const rl = this.createReadlineInterface();
+    const answer = await this.askAndGetAnswer(
+      rl,
+      `${question}${defaultAnswer}`
+    );
+    if (validator(answer) || detectedCity) {
+      return answer || detectedCity;
+    }
+
+    console.log('Incorrect zip code or city.');
+    return this.askTillCorrect(question, validator, detectedCity);
+  }
+
+  verifyUserInput(input: string) {
+    return Boolean(input);
+  }
+
+  async startConversation(parsedArgs: Object, detectedCity?: ?string = null) {
+    const zipcode = await this.askTillCorrect(
+      "What's the zipcode? ",
+      this.verifyUserInput,
+      detectedCity
+    );
+
+    return {
+      ...parsedArgs,
+      z: zipcode,
+      zip: zipcode
+    };
+  }
+}
