@@ -1,0 +1,11 @@
+{
+  "_": [],
+  "s": "celsius",
+  "scale": "celsius",
+  "g": false,
+  "disable-geolocation": false,
+  "disableGeolocation": false,
+  "$0": "src/index.js",
+  "z": "Prague",
+  "zip": "Prague"
+}

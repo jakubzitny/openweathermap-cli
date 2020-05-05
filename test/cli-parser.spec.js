@@ -1,6 +1,7 @@
 // @flow
 
 import path from 'path';
+import fs from 'fs';
 
 import chai, { expect } from 'chai';
 import chaiSinon from 'sinon-chai';
@@ -33,13 +34,24 @@ describe('CliParser', () => {
     };
   };
 
-  const createFsMock = (err: ?Error = null) => {
+  const createFsMock = (err: ?Error = null, readFilePath: ?string = null) => {
     return {
       writeFile: spy((filePath, contents, callback) => {
         callback(err);
       }),
       mkdir: spy((dirPath, callback) => {
         callback(err);
+      }),
+      readFile: spy((filePath, callback) => {
+        if (!readFilePath) {
+          callback(err);
+          return;
+        }
+
+        const locations = fs.readFileSync(
+          path.join(__dirname, readFilePath)
+        );
+        callback(null, locations);
       })
     };
   };
@@ -103,6 +115,24 @@ describe('CliParser', () => {
       await cliParser.initCliParser();
 
       expect(interviewerMock.startConversation).to.have.been.called;
+    });
+
+    it('should parse multi location import config', async () => {
+      const yargsMock = createYargsMock({ import: '/locations.txt' });
+      const fsMock = createFsMock(null, '_fixtures/locations.txt');
+      const cliParser = createCliParser({ yargs: yargsMock, fs: fsMock });
+      const parsedArgs = await cliParser.initCliParser();
+
+      expect(parsedArgs.locations).to.have.length(4);
+    });
+
+    it('should parse latest query config', async () => {
+      const yargsMock = createYargsMock({ latestQuery: true });
+      const fsMock = createFsMock(null, '_fixtures/latest-query.json');
+      const cliParser = createCliParser({ yargs: yargsMock, fs: fsMock });
+      const parsedArgs = await cliParser.initCliParser();
+
+      expect(parsedArgs).to.deep.equal({ ...parsedArgs });
     });
   });
 

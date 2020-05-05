@@ -31,7 +31,6 @@ const main = async () => {
 
   try {
     const args = await services.cliParser.initCliParser();
-    services.cliParser.saveConfig(args);
 
     // NOTE: Multi-location config
     if (args.import && args.locations.length) {
@@ -47,6 +46,7 @@ const main = async () => {
     }
 
     // NOTE: Regular, one-location
+    services.cliParser.saveConfig(args);
     runForLocation(args.city || args.zip, args, services);
   } catch (error) {
     console.error(error.message);
