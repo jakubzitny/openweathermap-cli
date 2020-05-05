@@ -61,7 +61,8 @@ Prague
 - better error handling, error messages, retrying, any maybe caching
 - dependency injection mechanism for clearer classes and better testing
 - debug / log messages (if specified from command line)
-- `CliParser` class could be refactored into smaller pieces
+- `CliParser` class could be refactored into smaller pieces and tested more thoroughly
+- integration tests
 
 
 ## Development
