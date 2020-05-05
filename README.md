@@ -1,6 +1,6 @@
 # OpenWeatherMap CLI
 
-[![Build Status](https://api.travis-ci.org/jakubzitny/openweathermap-cli.svg?branch=master)](https://travis-ci.org/jakubzitny/openweathermap-cli) [![codecov](https://codecov.io/gh/jakubzitny/openweathermap-cli/branch/master/graph/badge.svg)](https://codecov.io/gh/jakubzitny/openweathermap-cli)
+[![Build Status](https://api.travis-ci.org/jakubzitny/openweathermap-cli.svg?branch=master)](https://travis-ci.org/jakubzitny/openweathermap-cli) [![codecov](https://codecov.io/gh/jakubzitny/openweathermap-cli/branch/master/graph/badge.svg)](https://codecov.io/gh/jakubzitny/openweathermap-cli) [![Known Vulnerabilities](https://snyk.io/test/github/jakubzitny/openweathermap-cli/badge.svg?targetFile=package.json)](https://snyk.io/test/github/jakubzitny/openweathermap-cli?targetFile=package.json) [![Maintainability](https://api.codeclimate.com/v1/badges/763a96ad2b22c087d64c/maintainability)](https://codeclimate.com/github/jakubzitny/openweathermap-cli/maintainability)
 
 Display weather info for a city from OpenWeatherMap API
 
