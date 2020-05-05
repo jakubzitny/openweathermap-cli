@@ -1,13 +1,10 @@
 // @flow
 
-export type Scale = 'celsius' | 'fahrenheit'
+export type Scale = 'celsius' | 'fahrenheit';
 
 const DEFAULT_SCALE = 'celsius';
 
-export const convertScale = (
-  temp: number,
-  scale: Scale = DEFAULT_SCALE
-) => {
+export const convertScale = (temp: number, scale: Scale = DEFAULT_SCALE) => {
   if (scale === 'celsius') {
     return temp;
   }

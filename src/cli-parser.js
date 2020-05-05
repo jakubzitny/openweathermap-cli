@@ -27,7 +27,6 @@ type Args = $Shape<{
   import: string
 }>;
 
-
 export default class CliParser {
   fs: *;
 
@@ -62,7 +61,9 @@ export default class CliParser {
 
     if (argv.latestQuery) {
       const latestQueryConfigPath = this.getLatestQueryConfigPath();
-      const fileConfig = await this.readLatestQueryConfig(latestQueryConfigPath);
+      const fileConfig = await this.readLatestQueryConfig(
+        latestQueryConfigPath
+      );
 
       return {
         parsedArgs: fileConfig,
@@ -82,9 +83,9 @@ export default class CliParser {
       return parsedArgs;
     }
 
-    const detectedCity = !parsedArgs.disableGeolocation ?
-      await this.locationDetector.detectLocation() :
-      null;
+    const detectedCity = !parsedArgs.disableGeolocation
+      ? await this.locationDetector.detectLocation()
+      : null;
     const args = await this.interviewer.startConversation(
       parsedArgs,
       detectedCity

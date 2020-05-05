@@ -111,7 +111,7 @@ describe('CliParser', () => {
       const cliParser = createCliParser({ fs: fsMock });
       await cliParser.saveConfig(defaultArgv);
 
-      const expectedConfigPath = path.join('/', '.openweather', 'config.json');
+      const expectedConfigPath = path.join('/', '.openweather', 'latest-query.json');
       expect(fsMock.writeFile).to.have.been.calledWith(expectedConfigPath);
     });
 
