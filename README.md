@@ -8,6 +8,8 @@ Display weather info for a city from OpenWeatherMap API, interactively, from com
 
 ## Usage
 
+Make sure you have `OPENWEATHERMAP_API_KEY` in env when running this app. Get them at [openweathermap.org](https://home.openweathermap.org/api_keys). For convenience, alias `yarn start` or `node bin/index.js` to `openweathermap-cli`, exact steps are at the bottom of this README.
+
 Examples:
 
 - `openweathermap-cli # no args` - will ask interactively for a location with detected current city
@@ -75,7 +77,12 @@ cd openweathermap-cli
 yarn
 ```
 
-2. Check and test
+2. Build it
+```
+yarn build
+```
+
+3. Check and test
 
 ```
 yarn flow
@@ -84,11 +91,18 @@ yarn lint
 yarn test
 ```
 
-3. Run
+4. Run
 
 ```
 yarn start --help
 
 yarn start
 yarn start -c Prague
+
+# or with alias
+alias openweathermap-cli="node bin/index.js"
+
+openweathermap-cli --help
+openweathermap-cli -c Prague
+openweathermap-cli --city Paris -scale fahrenheit
 ```
