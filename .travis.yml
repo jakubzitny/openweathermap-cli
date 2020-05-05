@@ -1,0 +1,29 @@
+language: node_js
+node_js:
+  - "12.10"
+
+cache: yarn
+
+install:
+  - travis_retry yarn
+
+jobs:
+  include:
+    - stage: lint
+      name: "Lint"
+      script:
+        - yarn lint
+    - stage: prettier
+      name: "Prettier"
+      script:
+        - yarn prettier
+    - stage: flow
+      name: "Flow"
+      script:
+        - yarn flow
+    - stage: test
+      name: "Test"
+      script:
+        - yarn add codecov
+        - yarn test:coverage
+        - npx codecov

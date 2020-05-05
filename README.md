@@ -1,5 +1,7 @@
 # OpenWeatherMap CLI
 
+[![Build Status](https://api.travis-ci.org/jakubzitny/openweathermap-cli.svg?branch=master)](https://travis-ci.org/jakubzitny/openweathermap-cli) [![codecov](https://codecov.io/gh/jakubzitny/openweathermap-cli/branch/master/graph/badge.svg)](https://codecov.io/gh/jakubzitny/openweathermap-cli)
+
 Display weather info for a city from OpenWeatherMap API
 
 ## Development
