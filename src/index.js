@@ -18,7 +18,7 @@ const main = async () => {
 
   try {
     const data = await services.openWeatherMapApiRequestor.fetch(
-      args.city || args.c || args.zip || args.z
+      args.city || args.zip
     );
     const validatedData = validateApiData(data);
     const temp = convertScale(validatedData.main.temp, args.scale);

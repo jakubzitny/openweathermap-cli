@@ -6,6 +6,8 @@ import typeof Yargs from 'yargs';
 import typeof Fs from 'fs';
 import typeof Os from 'os';
 
+import cliConfig from './config/cli-config';
+
 import type Interviewer from './interviewer';
 import type LocationDetector from './location-detector';
 
@@ -57,7 +59,6 @@ export default class CliParser {
   }
 
   parseCliArgs() {
-    const cliConfig = require('./config/cli-config');
     const argv = this.yargs.options(cliConfig).argv;
 
     return {
