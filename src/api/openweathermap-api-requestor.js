@@ -11,11 +11,11 @@ import type { ApiData, ValidatedData } from './openweathermap-api-data.type';
 export default class OpenWeatherMapApiRequestor {
   apiRequestor: *;
 
-  process: *;
+  apiKey: *;
 
-  constructor(services: { apiRequestor: ApiRequestor, process: Process }) {
+  constructor(services: { apiRequestor: ApiRequestor, apiKey: ?string }) {
     this.apiRequestor = services.apiRequestor;
-    this.process = services.process;
+    this.apiKey = services.apiKey;
   }
 
   buildApiUrl(city: string, apiKey: string) {
@@ -26,7 +26,7 @@ export default class OpenWeatherMapApiRequestor {
   }
 
   async fetch(city: string) {
-    const apiKey = this.process.env.OPENWEATHERMAP_API_KEY;
+    const apiKey = this.apiKey;
     if (!apiKey) {
       throw new Error('We could not find OpenWeatherMap API key in your env');
     }

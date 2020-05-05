@@ -19,15 +19,13 @@ export function initServices() {
     readline,
     process // NOTE: Node global
   };
-
   const interviewer = new Interviewer(interviewerServices);
   const apiRequestor = new ApiRequestor({ got });
   const ipApiRequestor = new IpApiRequestor({ apiRequestor });
   const openWeatherMapApiRequestor = new OpenWeatherMapApiRequestor({
     apiRequestor,
-    process
+    apiKey: process.env.OPENWEATHERMAP_API_KEY
   });
-
   const locationDetector = new LocationDetector({ ipApiRequestor });
   const cliParserServices = {
     fs,
@@ -38,7 +36,6 @@ export function initServices() {
   };
 
   const cliParser = new CliParser(cliParserServices);
-
   return {
     cliParser,
     interviewer,

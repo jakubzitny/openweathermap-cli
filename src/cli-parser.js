@@ -57,38 +57,42 @@ export default class CliParser {
     return !(parsedArgs.l || parsedArgs.c || parsedArgs.z);
   }
 
-  async parseCliArgs() {
-    const argv = this.yargs.options(cliConfig).argv;
-
-    if (argv.import) {
-      try {
-        const multiCityConfig = await this.readFile(argv.import);
-        const locations = multiCityConfig.split('\n');
-        if (!locations.length || locations.length > 10) {
-          throw new Error('Too many locations');
-        }
-
-        return {
-          parsedArgs: argv,
-          interactive: false,
-          locations
-        };
-      } catch (e) {
-        throw new Error('We had problems loading the file you imported.');
+  async parseImportConfig(argv: Args) {
+    try {
+      const multiCityConfig = await this.readFile(argv.import);
+      const locations = multiCityConfig.split('\n');
+      if (!locations.length || locations.length > 10) {
+        throw new Error('Too many locations');
       }
-    }
-
-    if (argv.latestQuery) {
-      const latestQueryConfigPath = this.getLatestQueryConfigPath();
-      const fileConfig = await this.readLatestQueryConfig(
-        latestQueryConfigPath
-      );
 
       return {
-        parsedArgs: fileConfig,
+        parsedArgs: argv,
         interactive: false,
-        locations: []
+        locations
       };
+    } catch (e) {
+      throw new Error('We had problems loading the file you imported.');
+    }
+  }
+
+  async parseLatestQueryConfig() {
+    const latestQueryConfigPath = this.getLatestQueryConfigPath();
+    const fileConfig = await this.readLatestQueryConfig(latestQueryConfigPath);
+
+    return {
+      parsedArgs: fileConfig,
+      interactive: false,
+      locations: []
+    };
+  }
+
+  async parseCliArgs() {
+    const argv = this.yargs.options(cliConfig).argv;
+    if (argv.import) {
+      return this.parseImportConfig(argv);
+    }
+    if (argv.latestQuery) {
+      return this.parseLatestQueryConfig();
     }
 
     return {

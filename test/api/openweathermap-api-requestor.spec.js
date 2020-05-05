@@ -25,9 +25,7 @@ describe('OpenweatherMapApiRequestor', () => {
         apiRequestor: {
           fetch: spy(() => response)
         },
-        process: {
-          env: { OPENWEATHERMAP_API_KEY: 'key' }
-        }
+        apiKey: 'key'
       };
     });
 
@@ -64,7 +62,7 @@ describe('OpenweatherMapApiRequestor', () => {
     });
 
     it('should throw when openweathermap api key is not available in env', async () => {
-      services.process.env.OPENWEATHERMAP_API_KEY = '';
+      services.apiKey = '';
       const apiRequestor = createOpenweatherMapApiRequestor();
 
       try {
