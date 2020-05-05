@@ -1,6 +1,6 @@
 // @flow
 
-type Scale = 'celsius' | 'fahrenheit'
+export type Scale = 'celsius' | 'fahrenheit'
 
 const DEFAULT_SCALE = 'celsius';
 

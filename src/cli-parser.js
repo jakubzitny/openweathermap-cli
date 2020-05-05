@@ -10,8 +10,8 @@ import cliConfig from './config/cli-config';
 
 import type Interviewer from './interviewer';
 import type LocationDetector from './location-detector';
+import type { Scale } from './utils/scale-converter';
 
-type Scale = 'celsius' | 'fahrenheit';
 type Args = $Shape<{
   z: string,
   zip: string,
