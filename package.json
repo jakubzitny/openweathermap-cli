@@ -1,6 +1,6 @@
 {
   "name": "@jakubzitny/openweathermap-cli",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Display weather info for a city from OpenWeatherMap API",
   "main": "lib/index.js",
   "bin": {
