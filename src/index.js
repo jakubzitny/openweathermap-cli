@@ -22,9 +22,23 @@ const main = async () => {
     );
     const validatedData = validateApiData(data);
     const temp = convertScale(validatedData.main.temp, args.scale);
-    console.log(temp, formatScale(args.scale));
+
+    const description =
+      validatedData.weather &&
+      validatedData.weather[0] &&
+      validatedData.weather[0].description;
+    const formattedDescription = description ? `— ${description} ` : '';
+
+    // NOTE: Display results:
+    console.log();
+    console.log(`Weather in ${args.city || args.zip} ${formattedDescription}`);
+    console.log(`Temperature: ${temp}${formatScale(args.scale)}`);
+    if (validatedData.main.humidity) {
+      console.log(`Humidity: ${validatedData.main.humidity}`);
+    }
   } catch (error) {
-    console.error(error);
+    console.error(error.message);
+    services.process.exit(1);
   }
 };
 

@@ -46,6 +46,7 @@ export type ApiData = $Shape<{
 export type ValidatedData = {
   ...ApiData,
   main: {
-    temp: number
+    temp: number,
+    humidity: number
   }
 };

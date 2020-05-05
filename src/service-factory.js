@@ -42,6 +42,7 @@ export function initServices() {
   return {
     cliParser,
     interviewer,
-    openWeatherMapApiRequestor
+    openWeatherMapApiRequestor,
+    process
   };
 }

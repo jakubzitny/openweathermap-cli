@@ -25,7 +25,7 @@ export default class OpenWeatherMapApiRequestor {
     return `${OPENWEATHERMAP_API_URLBASE}${urlPath}?${query}`;
   }
 
-  fetch(city: string) {
+  async fetch(city: string) {
     const apiKey = this.process.env.OPENWEATHERMAP_API_KEY;
     if (!apiKey) {
       throw new Error('We could not find OpenWeatherMap API key in your env');
@@ -33,9 +33,14 @@ export default class OpenWeatherMapApiRequestor {
 
     try {
       const url = this.buildApiUrl(city, apiKey);
-      return this.apiRequestor.fetch(url);
+      const response = await this.apiRequestor.fetch(url);
+
+      return response;
     } catch (error) {
-      console.debug('Error when calling OWM API', error);
+      if (error.message.indexOf('404') !== -1) {
+        throw new Error('We could not find the location you requested.');
+      }
+
       throw new Error('There is a problem with calling the OpenWeatherMap API');
     }
   }
