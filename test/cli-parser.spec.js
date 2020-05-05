@@ -57,6 +57,12 @@ describe('CliParser', () => {
       yargs: createYargsMock(),
       // $FlowFixMe not a real interwiever mock
       interviewer: interviewerMock,
+      // $FlowFixMe not a real location detector mock
+      locationDetector: {
+        detectLocation: spy(() => {
+          return 'Prague';
+        })
+      },
       ...services
     });
   };
@@ -82,10 +88,10 @@ describe('CliParser', () => {
       expect(interviewerMock.startConversation).to.not.have.been.called;
     });
 
-    it('should parse cli args with interactively added city', async () => {
+    it('should parse cli args with automatically detected city', async () => {
       const yargsMock = createYargsMock({ c: null, city: null });
       const cliParser = createCliParser({ yargs: yargsMock });
-      const parsedArgs = await cliParser.initCliParser('Prague');
+      const parsedArgs = await cliParser.initCliParser();
 
       expect(parsedArgs).to.deep.equal({ ...defaultArgv, c: 'Prague', city: 'Prague' });
     });
@@ -93,7 +99,7 @@ describe('CliParser', () => {
     it('should start conversation when parsing with interactivity', async () => {
       const yargsMock = createYargsMock({ c: null, city: null });
       const cliParser = createCliParser({ yargs: yargsMock });
-      await cliParser.initCliParser('Prague');
+      await cliParser.initCliParser();
 
       expect(interviewerMock.startConversation).to.have.been.called;
     });

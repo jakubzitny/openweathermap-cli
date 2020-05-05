@@ -7,8 +7,7 @@ import { convertScale } from './utils/scale-converter';
 const main = async () => {
   const services = initServices();
 
-  const detectedLocation = detectLocation();
-  const args = await services.cliParser.initCliParser(detectedLocation);
+  const args = await services.cliParser.initCliParser();
 
   try {
     // NOTE: Try saving config, continue if it fails.

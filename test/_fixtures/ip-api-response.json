@@ -1,0 +1,16 @@
+{
+  "status": "success",
+  "country": "Czechia",
+  "countryCode": "CZ",
+  "region": "10",
+  "regionName": "Hlavni mesto Praha",
+  "city": "Prague",
+  "zip": "123 45",
+  "lat": 10.0766,
+  "lon": 12.5148,
+  "timezone": "Europe/Prague",
+  "isp": "isp",
+  "org": "Org, s.r.o",
+  "as": "as",
+  "query": "1.2.3.4"
+}

@@ -7,6 +7,7 @@ import typeof Fs from 'fs';
 import typeof Os from 'os';
 
 import type Interviewer from './interviewer';
+import type LocationDetector from './location-detector';
 
 type Scale = 'celsius' | 'fahrenheit';
 type Args = $Shape<{
@@ -31,6 +32,8 @@ export default class CliParser {
 
   interviewer: *;
 
+  locationDetector: *;
+
   os: *;
 
   yargs: *;
@@ -39,9 +42,11 @@ export default class CliParser {
     fs: Fs,
     os: Os,
     interviewer: Interviewer,
+    locationDetector: LocationDetector,
     yargs: Yargs
   }) {
     this.fs = services.fs;
+    this.locationDetector = services.locationDetector;
     this.os = services.os;
     this.interviewer = services.interviewer;
     this.yargs = services.yargs;
@@ -61,13 +66,17 @@ export default class CliParser {
     };
   }
 
-  async initCliParser(city?: ?string = null) {
+  async initCliParser() {
     const { interactive, parsedArgs } = this.parseCliArgs();
     if (!interactive) {
       return parsedArgs;
     }
 
-    const args = await this.interviewer.startConversation(parsedArgs, city);
+    const detectedCity = await this.locationDetector.detectLocation();
+    const args = await this.interviewer.startConversation(
+      parsedArgs,
+      detectedCity
+    );
 
     return args;
   }
