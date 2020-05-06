@@ -4,7 +4,7 @@
 
 Display weather info for a city from OpenWeatherMap API, interactively, from command line or from a config.
 
-![example](https://i.imgur.com/DWfheL7.gif)
+![rec](https://user-images.githubusercontent.com/3315662/81155566-5e13ce00-8f85-11ea-996f-68125985c2e2.gif)
 
 ## Usage
 
