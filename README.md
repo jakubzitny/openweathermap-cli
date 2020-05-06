@@ -85,6 +85,7 @@ Prague
 - dependency injection mechanism for clearer classes and better testing
 - debug / log messages (if specified from command line)
 - `CliParser` class could be refactored into smaller pieces and tested more thoroughly
+- code minification
 - integration tests
 
 
