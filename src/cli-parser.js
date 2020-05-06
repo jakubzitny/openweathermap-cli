@@ -97,7 +97,9 @@ export default class CliParser {
     }
 
     if (!isScaleValid(argv.scale)) {
-      throw new Error(`Please enter a valid scale (${allowedScales.join(', ')})`);
+      throw new Error(
+        `Please enter a valid scale (${allowedScales.join(', ')})`
+      );
     }
 
     return {
