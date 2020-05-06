@@ -80,8 +80,8 @@ Prague
 ## Possible improvements
 
 - better UX (not a CLI in the ideal scenario, who looks for the weather in CLI?)
-- better API (this one is slow and limited, we should create our own and connect to different providers maybe)
-- better error handling, error messages, retrying, any maybe caching
+- better API (this one is slow and limited, we should create our own and connect to different providers)
+- better error handling, error messages, retrying, and caching
 - dependency injection mechanism for clearer classes and better testing
 - debug / log messages (if specified from command line)
 - `CliParser` class could be refactored into smaller pieces and tested more thoroughly
