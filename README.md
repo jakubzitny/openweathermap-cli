@@ -40,7 +40,6 @@ Examples:
 - `openweathermap-cli --disable-geolocation` - will ask interactively without asking for a location
 
 
-
 ### Options
 
 ```
@@ -55,6 +54,8 @@ Options:
   -v, --version              Show version number                       [boolean]
   -h, --help                 Show help                                 [boolean]
 ```
+
+Allowed scale values are `c`, `f`, `celsius` and `fahrenheit`, `celsius` is default if not specified.
 
 ### Multiple locations config file
 
