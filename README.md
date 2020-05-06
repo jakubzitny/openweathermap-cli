@@ -19,6 +19,17 @@ export OPENWEATHERMAP_API_KEY="your key"
 openweathermap-cli -h
 ```
 
+Or on Windows:
+```
+npm install -g @jakubzitny/openweathermap-cli
+$Env:OPENWEATHERMAP_API_KEY="your key"
+
+# Make sure you can run NPM global scripts
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+openweathermap-cli -h
+```
+
 Examples:
 
 - `openweathermap-cli # no args` - will ask interactively for a location with detected current city
