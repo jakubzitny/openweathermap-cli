@@ -7,6 +7,7 @@ import typeof Fs from 'fs';
 import typeof Os from 'os';
 
 import cliConfig from './config/cli-config';
+import { isScaleValid, allowedScales } from './utils/scale-converter';
 
 import type Interviewer from './interviewer';
 import type LocationDetector from './location-detector';
@@ -93,6 +94,10 @@ export default class CliParser {
     }
     if (argv.latestQuery) {
       return this.parseLatestQueryConfig();
+    }
+
+    if (!isScaleValid(argv.scale)) {
+      throw new Error(`Please enter a valid scale (${allowedScales.join(', ')})`);
     }
 
     return {

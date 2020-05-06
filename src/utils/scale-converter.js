@@ -1,11 +1,12 @@
 // @flow
 
-export type Scale = 'celsius' | 'fahrenheit';
+export type Scale = 'c' | 'f' | 'celsius' | 'fahrenheit';
 
+export const allowedScales = ['c', 'f', 'celsius', 'fahrenheit'];
 const DEFAULT_SCALE = 'celsius';
 
 export const convertScale = (temp: number, scale: Scale = DEFAULT_SCALE) => {
-  if (scale === 'celsius') {
+  if (scale === 'celsius' || scale === 'c') {
     return temp;
   }
 
@@ -14,9 +15,13 @@ export const convertScale = (temp: number, scale: Scale = DEFAULT_SCALE) => {
 };
 
 export const formatScale = (scale: Scale = DEFAULT_SCALE) => {
-  if (scale === 'celsius') {
+  if (scale === 'celsius' || scale === 'c') {
     return '°C';
   }
 
   return '°F';
+};
+
+export const isScaleValid = (scale: Scale) => {
+  return allowedScales.indexOf(scale) !== -1;
 };
