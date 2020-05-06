@@ -56,7 +56,7 @@ export default class Interviewer {
 
   async startConversation(parsedArgs: Object, detectedCity?: ?string = null) {
     const zipcode = await this.askTillCorrect(
-      "What's the zipcode? ",
+      "What's the location (enter a zipcode or a city)? ",
       this.verifyUserInput,
       detectedCity
     );
