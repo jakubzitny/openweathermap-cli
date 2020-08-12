@@ -2,6 +2,8 @@ version = 1
 
 test_patterns = ["*/test/**"]
 
+exclude_patterns = ["*/flow-typed/npm/**"]
+
 [[analyzers]]
 name = "javascript"
 enabled = true
@@ -13,6 +15,6 @@ enabled = true
     "nodejs",
     "jest"
   ]
-  dialect = "typescript"
-  style_guide = "airbnb"
   plugins = ["react"]
+  style_guide = "airbnb"
+  dialect = "typescript"
